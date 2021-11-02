@@ -178,6 +178,7 @@
         "vcruntimed",
         "ucrtd",
         "msvcrtd",
-        "XIPFLAGS"
+        "XIPFLAGS",
+        "LOONGARCH"
     ]
 }

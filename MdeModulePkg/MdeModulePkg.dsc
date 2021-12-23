@@ -192,7 +192,7 @@
   #
   NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
 
-[LibraryClasses.EBC, LibraryClasses.RISCV64]
+[LibraryClasses.EBC, LibraryClasses.RISCV64, LibraryClasses.MIPS64]
   LockBoxLib|MdeModulePkg/Library/LockBoxNullLib/LockBoxNullLib.inf
 
 [PcdsFeatureFlag]

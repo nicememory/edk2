@@ -3,6 +3,7 @@
 # Copyright (c) Microsoft Corporation.
 # Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
 # Copyright (c) 2020 - 2021, ARM Limited. All rights reserved.<BR>
+# Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>. <BR>
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 ##
 import os
@@ -78,7 +79,8 @@ class Settings(CiBuildSettingsManager, UpdateSettingsManager, SetupSettingsManag
                 "X64",
                 "ARM",
                 "AARCH64",
-                "RISCV64")
+                "RISCV64",
+                "MIPS64")
 
     def GetTargetsSupported(self):
         ''' return iterable of edk2 target tags supported by this build '''
@@ -169,6 +171,8 @@ class Settings(CiBuildSettingsManager, UpdateSettingsManager, SetupSettingsManag
                     scopes += ("gcc_arm_linux",)
                 if "RISCV64" in self.ActualArchitectures:
                     scopes += ("gcc_riscv64_unknown",)
+                if "MIPS64" in self.ActualArchitectures:
+                    scopes += ("gcc_mips64_linux",)
             self.ActualScopes = scopes
         return self.ActualScopes
 

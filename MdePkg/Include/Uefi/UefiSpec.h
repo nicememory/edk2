@@ -7,6 +7,7 @@
 
 Copyright (c) 2006 - 2021, Intel Corporation. All rights reserved.<BR>
 Portions Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -2201,6 +2202,7 @@ typedef struct {
 #define EFI_REMOVABLE_MEDIA_FILE_NAME_ARM      L"\\EFI\\BOOT\\BOOTARM.EFI"
 #define EFI_REMOVABLE_MEDIA_FILE_NAME_AARCH64  L"\\EFI\\BOOT\\BOOTAA64.EFI"
 #define EFI_REMOVABLE_MEDIA_FILE_NAME_RISCV64  L"\\EFI\\BOOT\\BOOTRISCV64.EFI"
+#define EFI_REMOVABLE_MEDIA_FILE_NAME_MIPS64   L"\\EFI\\BOOT\\BOOTMIPS64.EFI"
 
 #if !defined (EFI_REMOVABLE_MEDIA_FILE_NAME)
   #if   defined (MDE_CPU_IA32)
@@ -2214,6 +2216,8 @@ typedef struct {
 #define EFI_REMOVABLE_MEDIA_FILE_NAME  EFI_REMOVABLE_MEDIA_FILE_NAME_AARCH64
   #elif defined (MDE_CPU_RISCV64)
 #define EFI_REMOVABLE_MEDIA_FILE_NAME  EFI_REMOVABLE_MEDIA_FILE_NAME_RISCV64
+  #elif defined (MDE_CPU_MIPS64)
+#define EFI_REMOVABLE_MEDIA_FILE_NAME  EFI_REMOVABLE_MEDIA_FILE_NAME_MIPS64
   #else
     #error Unknown Processor Type
   #endif

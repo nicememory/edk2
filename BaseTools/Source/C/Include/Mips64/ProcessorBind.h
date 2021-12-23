@@ -73,3 +73,5 @@ typedef UINT64  UINTN;
 // The stack alignment required for Mips64
 //
 #define CPU_STACK_ALIGNMENT   sizeof(UINT64)
+
+#endif

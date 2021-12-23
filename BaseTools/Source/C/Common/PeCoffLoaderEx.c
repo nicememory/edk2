@@ -4,6 +4,7 @@ IA32 and X64 Specific relocation fixups
 Copyright (c) 2004 - 2018, Intel Corporation. All rights reserved.<BR>
 Portions Copyright (c) 2011 - 2013, ARM Ltd. All rights reserved.<BR>
 Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 --*/
@@ -328,6 +329,39 @@ PeCoffLoaderRelocateArmImage (
      // break omitted - ARM instruction encoding not implemented
   default:
     return RETURN_UNSUPPORTED;
+  }
+
+  return RETURN_SUCCESS;
+}
+
+/**
+  Performs a Mips64 specific relocation fixup.
+  @param  Reloc       Pointer to the relocation record.
+  @param  Fixup       Pointer to the address to fix up.
+  @param  FixupData   Pointer to a buffer to log the fixups.
+  @param  Adjust      The offset to adjust the fixup.
+  @return Status code.
+**/
+RETURN_STATUS
+PeCoffLoaderRelocateMips64Image (
+  IN UINT16      *Reloc,
+  IN OUT CHAR8   *Fixup,
+  IN OUT CHAR8   **FixupData,
+  IN UINT64      Adjust
+  )
+{
+  UINT8  RelocType;
+  UINT64 Value = 0;
+  UINT64 Tmp1 = 0;
+  UINT64 Tmp2 = 0;
+  RelocType = ((*Reloc) >> 12);
+
+  switch (RelocType) {
+    case 0:
+      break;
+      default:
+      Error (NULL, 0, 3000, "", "PeCoffLoaderRelocateMips64Image: Fixup[0x%x] Adjust[0x%llx] *Reloc[0x%x], type[0x%x].", *(UINT32*)Fixup, Adjust, *Reloc, RelocType);
+      return RETURN_UNSUPPORTED;
   }
 
   return RETURN_SUCCESS;

@@ -4,6 +4,7 @@
 
   Copyright (c) 2016, Intel Corporation. All rights reserved.<BR>
   Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+  Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -269,6 +270,7 @@ typedef enum {
 #define PXE_CLIENT_ARCH_RISCV32   0x0019           /// RISC-V uefi 32 for PXE
 #define PXE_CLIENT_ARCH_RISCV64   0x001B           /// RISC-V uefi 64 for PXE
 #define PXE_CLIENT_ARCH_RISCV128  0x001D           /// RISC-V uefi 128 for PXE
+#define PXE_CLIENT_ARCH_MIPS64    0x0037           /// MIPS64 uefi 64 for PXE
 
 #define HTTP_CLIENT_ARCH_IA32      0x000F          /// x86 uefi boot from http
 #define HTTP_CLIENT_ARCH_X64       0x0010          /// x64 uefi boot from http
@@ -278,5 +280,6 @@ typedef enum {
 #define HTTP_CLIENT_ARCH_RISCV32   0x001A          /// RISC-V uefi 32 boot from http
 #define HTTP_CLIENT_ARCH_RISCV64   0x001C          /// RISC-V uefi 64 boot from http
 #define HTTP_CLIENT_ARCH_RISCV128  0x001E          /// RISC-V uefi 128 boot from http
+#define HTTP_CLIENT_ARCH_MIPS64    0x0038          /// MIPS64 uefi 64 boot from http
 
 #endif

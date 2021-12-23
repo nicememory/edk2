@@ -43,6 +43,7 @@
 #define IMAGE_FILE_MACHINE_ARMT     0x01c2  // 32bit Mixed ARM and Thumb/Thumb 2  Little Endian
 #define IMAGE_FILE_MACHINE_ARM64    0xAA64  // 64bit ARM Architecture, Little Endian
 #define IMAGE_FILE_MACHINE_RISCV64  0x5064  // 64bit RISC-V ISA
+#define IMAGE_FILE_MACHINE_MIPS64   0x3764  // 64bit MIPS ISA, Little Endian
 
 //
 // Support old names for backward compatible
@@ -53,6 +54,7 @@
 #define EFI_IMAGE_MACHINE_ARMT      IMAGE_FILE_MACHINE_ARMT
 #define EFI_IMAGE_MACHINE_AARCH64   IMAGE_FILE_MACHINE_ARM64
 #define EFI_IMAGE_MACHINE_RISCV64   IMAGE_FILE_MACHINE_RISCV64
+#define EFI_IMAGE_MACHINE_MIPS64    IMAGE_FILE_MACHINE_MIPS64
 
 #define EFI_IMAGE_DOS_SIGNATURE     0x5A4D      // MZ
 #define EFI_IMAGE_OS2_SIGNATURE     0x454E      // NE
@@ -513,7 +515,6 @@ typedef struct {
 #define EFI_IMAGE_REL_BASED_RISCV_LOW12S  8
 #define EFI_IMAGE_REL_BASED_IA64_IMM64    9
 #define EFI_IMAGE_REL_BASED_DIR64         10
-
 
 ///
 /// Line number format.

@@ -5,6 +5,7 @@
 #  Copyright (c) 2015, Hewlett-Packard Development Company, L.P.<BR>
 #  (C) Copyright 2020, Hewlett Packard Enterprise Development LP<BR>
 #  Copyright (c) Microsoft Corporation
+#  Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -267,7 +268,7 @@ DEFINE DTC_BIN                 = ENV(DTC_PREFIX)dtc
 #                               Intel(r) ACPI Compiler from
 #                               https://acpica.org/downloads
 #   GCC5        -Linux,Windows-  Requires:
-#                             GCC 5 with LTO support, targeting x86_64-linux-gnu, aarch64-linux-gnu, arm-linux-gnueabi or riscv64-linux-gnu
+#                             GCC 5 with LTO support, targeting x86_64-linux-gnu, aarch64-linux-gnu, arm-linux-gnueabi, riscv64-linux-gnu or mips64el-linux-gnuabi64
 #                        Optional:
 #                             Required to build platforms or ACPI tables:
 #                               Intel(r) ACPI Compiler from
@@ -1873,17 +1874,20 @@ DEFINE GCC_ARM_CC_FLAGS            = DEF(GCC_ALL_CC_FLAGS) -mlittle-endian -mabi
 DEFINE GCC_ARM_CC_XIPFLAGS         = -mno-unaligned-access
 DEFINE GCC_AARCH64_CC_FLAGS        = DEF(GCC_ALL_CC_FLAGS) -mlittle-endian -fno-short-enums -fverbose-asm -funsigned-char  -ffunction-sections -fdata-sections -Wno-address -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-pic -fno-pie -ffixed-x18
 DEFINE GCC_AARCH64_CC_XIPFLAGS     = -mstrict-align -mgeneral-regs-only
+DEFINE GCC_MIPS64_CC_FLAGS         = DEF(GCC_ALL_CC_FLAGS) -march=mips64r2 -mabi=gnuabi64 -fno-plt -Wno-address -fno-short-enums -fsigned-char -ffunction-sections -fdata-sections
 DEFINE GCC_DLINK_FLAGS_COMMON      = -nostdlib --pie
 DEFINE GCC_DLINK2_FLAGS_COMMON     = -Wl,--script=$(EDK_TOOLS_PATH)/Scripts/GccBase.lds
 DEFINE GCC_IA32_X64_DLINK_COMMON   = DEF(GCC_DLINK_FLAGS_COMMON) --gc-sections
 DEFINE GCC_ARM_AARCH64_DLINK_COMMON= -Wl,--emit-relocs -nostdlib -Wl,--gc-sections -u $(IMAGE_ENTRY_POINT) -Wl,-e,$(IMAGE_ENTRY_POINT),-Map,$(DEST_DIR_DEBUG)/$(BASE_NAME).map
 DEFINE GCC_ARM_DLINK_FLAGS         = DEF(GCC_ARM_AARCH64_DLINK_COMMON) -z common-page-size=0x20 -Wl,--pic-veneer
 DEFINE GCC_AARCH64_DLINK_FLAGS     = DEF(GCC_ARM_AARCH64_DLINK_COMMON) -z common-page-size=0x20
+DEFINE GCC_MIPS64_DLINK_FLAGS      = -Wl,--emit-relocs -nostdlib -Wl,--gc-sections -u $(IMAGE_ENTRY_POINT) -Wl,-e,$(IMAGE_ENTRY_POINT),-Map,$(DEST_DIR_DEBUG)/$(BASE_NAME).map -z common-page-size=0x20
 DEFINE GCC_ARM_AARCH64_ASLDLINK_FLAGS = -Wl,--defsym=PECOFF_HEADER_SIZE=0 DEF(GCC_DLINK2_FLAGS_COMMON) -z common-page-size=0x20
 DEFINE GCC_IA32_X64_ASLDLINK_FLAGS = DEF(GCC_IA32_X64_DLINK_COMMON) --entry _ReferenceAcpiTable -u $(IMAGE_ENTRY_POINT)
 DEFINE GCC_ARM_ASLDLINK_FLAGS      = DEF(GCC_ARM_DLINK_FLAGS) -Wl,--entry,ReferenceAcpiTable -u $(IMAGE_ENTRY_POINT) DEF(GCC_ARM_AARCH64_ASLDLINK_FLAGS)
 DEFINE GCC_AARCH64_ASLDLINK_FLAGS  = DEF(GCC_AARCH64_DLINK_FLAGS) -Wl,--entry,ReferenceAcpiTable -u $(IMAGE_ENTRY_POINT) DEF(GCC_ARM_AARCH64_ASLDLINK_FLAGS)
 DEFINE GCC_IA32_X64_DLINK_FLAGS    = DEF(GCC_IA32_X64_DLINK_COMMON) --entry _$(IMAGE_ENTRY_POINT) --file-alignment 0x20 --section-alignment 0x20 -Map $(DEST_DIR_DEBUG)/$(BASE_NAME).map
+DEFINE GCC_MIPS64_ASLDLINK_FLAGS   = DEF(GCC_MIPS64_DLINK_FLAGS) --entry ReferenceAcpiTable -u $(IMAGE_ENTRY_POINT)
 DEFINE GCC_ASM_FLAGS               = -c -x assembler -imacros AutoGen.h
 DEFINE GCC_PP_FLAGS                = -E -x assembler-with-cpp -include AutoGen.h
 DEFINE GCC_VFRPP_FLAGS             = -x c -E -P -DVFRCOMPILE --include $(MODULE_NAME)StrDefs.h
@@ -1896,6 +1900,7 @@ DEFINE GCC_X64_RC_FLAGS            = -I binary -O elf64-x86-64        -B i386   
 DEFINE GCC_ARM_RC_FLAGS            = -I binary -O elf32-littlearm     -B arm     --rename-section .data=.hii
 DEFINE GCC_AARCH64_RC_FLAGS        = -I binary -O elf64-littleaarch64 -B aarch64 --rename-section .data=.hii
 DEFINE GCC_RISCV64_RC_FLAGS        = -I binary -O elf64-littleriscv   -B riscv   --rename-section .data=.hii
+DEFINE GCC_MIPS64_RC_FLAGS         = -I binary -O elf64-mips64el      -B mips64  --rename-section .data=.hii
 
 # GCC Build Flag for included header file list generation
 DEFINE GCC_DEPS_FLAGS              = -MMD -MF $@.deps
@@ -1986,6 +1991,12 @@ DEFINE GCC5_RISCV64_DLINK_FLAGS            = DEF(GCC5_RISCV_ALL_DLINK_FLAGS) -Wl
 DEFINE GCC5_RISCV64_DLINK2_FLAGS           = DEF(GCC5_RISCV_ALL_DLINK2_FLAGS)
 DEFINE GCC5_RISCV64_ASM_FLAGS              = DEF(GCC5_RISCV_ALL_ASM_FLAGS) -march=DEF(GCC5_RISCV64_ARCH) -mcmodel=medany -mabi=lp64
 DEFINE GCC_PP_FLAGS                        = -E -x assembler-with-cpp -include AutoGen.h DEF(GCC5_RISCV_OPENSBI_TYPES)
+
+DEFINE GCC5_MIPS64_CC_FLAGS                = DEF(GCC_MIPS64_CC_FLAGS) -mno-memcpy -Werror
+DEFINE GCC5_MIPS64_DLINK_FLAGS             = DEF(GCC_MIPS64_DLINK_FLAGS)
+DEFINE GCC5_MIPS64_DLINK2_FLAGS            = DEF(GCC_DLINK2_FLAGS_COMMON) -Wl,--defsym=PECOFF_HEADER_SIZE=0x228
+DEFINE GCC5_MIPS64_ASLDLINK_FLAGS          = DEF(GCC_MIPS64_ASLDLINK_FLAGS)
+DEFINE GCC5_MPIS64_ASM_FLAGS               = -x assembler-with-cpp -mabi=gnuabi64 -march=mips64el -Wa,-mla-global-with-abs -fno-builtin -c -Wall
 
 ####################################################################################
 #
@@ -2462,6 +2473,33 @@ RELEASE_GCC5_AARCH64_DLINK_XIPFLAGS = -z common-page-size=0x20
 *_GCC5_RISCV64_RC_FLAGS             = DEF(GCC_RISCV64_RC_FLAGS)
 *_GCC5_RISCV64_OBJCOPY_FLAGS        =
 *_GCC5_RISCV64_DTCPP_FLAGS          = DEF(GCC_DTCPP_FLAGS)
+
+##################
+# GCC5 MIPS64 definitions
+##################
+*_GCC5_MIPS64_OBJCOPY_PATH         = ENV(GCC5_MIPS64_PREFIX)objcopy
+*_GCC5_MIPS64_CC_PATH              = ENV(GCC5_MIPS64_PREFIX)gcc
+*_GCC5_MIPS64_SLINK_PATH           = ENV(GCC5_MIPS64_PREFIX)gcc-ar
+*_GCC5_MIPS64_DLINK_PATH           = ENV(GCC5_MIPS64_PREFIX)gcc
+*_GCC5_MIPS64_ASLDLINK_PATH        = ENV(GCC5_MIPS64_PREFIX)gcc
+*_GCC5_MIPS64_ASM_PATH             = ENV(GCC5_MIPS64_PREFIX)gcc
+*_GCC5_MIPS64_PP_PATH              = ENV(GCC5_MIPS64_PREFIX)gcc
+*_GCC5_MIPS64_VFRPP_PATH           = ENV(GCC5_MIPS64_PREFIX)gcc
+*_GCC5_MIPS64_ASLCC_PATH           = ENV(GCC5_MIPS64_PREFIX)gcc
+*_GCC5_MIPS64_ASLPP_PATH           = ENV(GCC5_MIPS64_PREFIX)gcc
+*_GCC5_MIPS64_RC_PATH              = ENV(GCC5_MIPS64_PREFIX)objcopy
+
+*_GCC5_MIPS64_ASLCC_FLAGS          = DEF(GCC_ASLCC_FLAGS)
+*_GCC5_MIPS64_ASLDLINK_FLAGS       = DEF(GCC5_MIPS64_ASLDLINK_FLAGS)
+*_GCC5_MIPS64_ASM_FLAGS            = DEF(GCC5_MIPS64_ASM_FLAGS)
+*_GCC5_MIPS64_CC_FLAGS             = DEF(GCC5_MIPS64_CC_FLAGS)
+*_GCC5_MIPS64_DLINK_FLAGS          = DEF(GCC5_MIPS64_DLINK_FLAGS)
+*_GCC5_MIPS64_DLINK2_FLAGS         = DEF(GCC5_MIPS64_DLINK2_FLAGS)
+*_GCC5_MIPS64_RC_FLAGS             = DEF(GCC_MIPS64_RC_FLAGS)
+*_GCC5_MIPS64_OBJCOPY_FLAGS        =
+*_GCC5_MIPS64_PP_FLAGS             = DEF(GCC_PP_FLAGS)
+DEBUG_GCC5_MIPS64_CC_FLAGS         = DEF(GCC5_MIPS64_CC_FLAGS)
+RELEASE_GCC5_MIPS64_CC_FLAGS       = DEF(GCC5_MIPS64_CC_FLAGS) -Wno-unused-but-set-variable -Wno-unused-variable
 
 ####################################################################################
 #

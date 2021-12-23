@@ -4,6 +4,7 @@
 #  Copyright (c) 2007 - 2018, Intel Corporation. All rights reserved.<BR>
 #  Portions copyright (c) 2008 - 2009, Apple Inc. All rights reserved.<BR>
 #  Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+#  Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -20,7 +21,7 @@
   LIBRARY_CLASS                  = SynchronizationLib
 
 #
-#  VALID_ARCHITECTURES           = IA32 X64 EBC ARM AARCH64
+#  VALID_ARCHITECTURES           = IA32 X64 EBC ARM AARCH64 MIPS64
 #
 [Sources]
   BaseSynchronizationLibInternals.h
@@ -82,6 +83,10 @@
 [Sources.RISCV64]
   Synchronization.c
   RiscV64/Synchronization.S
+
+[Sources.MIPS64]
+  Synchronization.c
+  Mips64/Synchronization.c
 
 [Packages]
   MdePkg/MdePkg.dec

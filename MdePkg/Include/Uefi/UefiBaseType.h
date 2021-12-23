@@ -4,6 +4,7 @@
 Copyright (c) 2006 - 2021, Intel Corporation. All rights reserved.<BR>
 Portions copyright (c) 2011 - 2016, ARM Ltd. All rights reserved.<BR>
 Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -246,6 +247,8 @@ typedef union {
 #define EFI_IMAGE_MACHINE_RISCV64   0x5064
 #define EFI_IMAGE_MACHINE_RISCV128  0x5128
 
+#define EFI_IMAGE_MACHINE_MIPS64    0x5128
+
 #if !defined (EFI_IMAGE_MACHINE_TYPE_VALUE) && !defined (EFI_IMAGE_MACHINE_CROSS_TYPE_VALUE)
   #if   defined (MDE_CPU_IA32)
 
@@ -289,6 +292,13 @@ typedef union {
 #define EFI_IMAGE_MACHINE_TYPE_SUPPORTED(Machine)  ((Machine) == EFI_IMAGE_MACHINE_EBC)
 
 #define EFI_IMAGE_MACHINE_CROSS_TYPE_SUPPORTED(Machine)  (FALSE)
+
+  #elif defined (MDE_CPU_MIPS64)
+
+#define EFI_IMAGE_MACHINE_TYPE_SUPPORTED(Machine) \
+    ((Machine) == EFI_IMAGE_MACHINE_MIPS64)
+
+#define EFI_IMAGE_MACHINE_CROSS_TYPE_SUPPORTED(Machine) (FALSE)
 
   #else
     #error Unknown Processor Type

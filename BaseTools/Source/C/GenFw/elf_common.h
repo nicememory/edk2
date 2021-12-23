@@ -4,6 +4,7 @@ Ported ELF include files from FreeBSD
 Copyright (c) 2009 - 2010, Apple Inc. All rights reserved.<BR>
 Portions Copyright (c) 2011 - 2013, ARM Ltd. All rights reserved.<BR>
 Portion Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 

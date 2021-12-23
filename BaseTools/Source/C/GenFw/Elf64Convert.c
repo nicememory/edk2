@@ -4,6 +4,7 @@ Elf64 convert solution
 Copyright (c) 2010 - 2021, Intel Corporation. All rights reserved.<BR>
 Portions copyright (c) 2013-2014, ARM Ltd. All rights reserved.<BR>
 Portions Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -163,7 +164,7 @@ InitializeElf64 (
     Error (NULL, 0, 3000, "Unsupported", "ELF e_type not ET_EXEC or ET_DYN");
     return FALSE;
   }
-  if (!((mEhdr->e_machine == EM_X86_64) || (mEhdr->e_machine == EM_AARCH64) || (mEhdr->e_machine == EM_RISCV64))) {
+  if (!((mEhdr->e_machine == EM_X86_64) || (mEhdr->e_machine == EM_AARCH64) || (mEhdr->e_machine == EM_RISCV64 || (mEhdr->e_machine == EM_MIPS64))) {
     Warning (NULL, 0, 3000, "Unsupported", "ELF e_machine is not Elf64 machine.");
   }
   if (mEhdr->e_version != EV_CURRENT) {
@@ -730,6 +731,7 @@ ScanSections64 (
   case EM_X86_64:
   case EM_AARCH64:
   case EM_RISCV64:
+  case EM_MIPS64:
     mCoffOffset += sizeof (EFI_IMAGE_NT_HEADERS64);
   break;
   default:
@@ -943,7 +945,10 @@ ScanSections64 (
     NtHdr->Pe32Plus.FileHeader.Machine = EFI_IMAGE_MACHINE_RISCV64;
     NtHdr->Pe32Plus.OptionalHeader.Magic = EFI_IMAGE_NT_OPTIONAL_HDR64_MAGIC;
     break;
-
+  case EM_MIPS64:
+    NtHdr->Pe32Plus.FileHeader.Machine = EFI_IMAGE_MACHINE_MIPS64;
+    NtHdr->Pe32Plus.OptionalHeader.Magic = EFI_IMAGE_NT_OPTIONAL_HDR64_MAGIC;
+    break;
   default:
     VerboseMsg ("%s unknown e_machine type. Assume X64", (UINTN)mEhdr->e_machine);
     NtHdr->Pe32Plus.FileHeader.Machine = EFI_IMAGE_MACHINE_X64;
@@ -1417,6 +1422,10 @@ WriteSections64 (
           // Write section for RISC-V 64 architecture.
           //
           WriteSectionRiscV64 (Rel, Targ, SymShdr, Sym);
+        } else if (mEhdr->e_machine == EM_MIPS64) {
+          //
+          // Write section for MIPS64 architecture.
+          //
         } else {
           Error (NULL, 0, 3000, "Invalid", "Not a supported machine type");
         }
@@ -1650,6 +1659,9 @@ WriteRelocations64 (
           } else {
             Error (NULL, 0, 3000, "Not Supported", "This tool does not support relocations for ELF with e_machine %u (processor type).", (unsigned) mEhdr->e_machine);
           }
+        } else if (mEhdr->e_machine == EM_MIPS64) {
+          //TODO
+          Error (NULL, 0, 3000, "Invalid", "WriteSections (): %s unsupported ELF EM_MIPS64 relocation 0x%x.", mInImageName, (unsigned) ELF64_R_TYPE(Rel->r_info));
         }
         if (mEhdr->e_machine == EM_X86_64 && RelShdr->sh_info == mGOTShindex) {
           //

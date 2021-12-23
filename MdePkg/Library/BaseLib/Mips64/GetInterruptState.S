@@ -26,3 +26,9 @@ ASM_PFX(GetInterruptState):
   and   $t0, $t0, $t1
   beqz  $t0, 1f
   li.w  $v0, 0x1
+ b     2f
+1:
+  li.w  $v0, 0x0
+2:
+  jirl    $zero, $ra, 0
+  .end

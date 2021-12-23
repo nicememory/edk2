@@ -10,6 +10,7 @@
 Copyright (c) 2006 - 2018, Intel Corporation. All rights reserved.<BR>
 Portions copyright (c) 2008 - 2009, Apple Inc. All rights reserved.<BR>
 Portions Copyright (c) 2016 - 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+Copyright (c) 2021 Jintao Yin <jintao.yin@i-soft.com.cn>
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -38,7 +39,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define IMAGE_FILE_MACHINE_RISCV32         0x5032
 #define IMAGE_FILE_MACHINE_RISCV64         0x5064
 #define IMAGE_FILE_MACHINE_RISCV128        0x5128
-
+#define IMAGE_FILE_MACHINE_MIPS64          0x6264
 //
 // EXE file formats
 //

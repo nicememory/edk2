@@ -1,6 +1,6 @@
 /** @file
   I/O library for non I/O read and write access (memory map I/O read and
-  write only) architecture, such as ARM and RISC-V processor.
+  write only) architecture, such as ARM, RISC-V and Mips64 processor.
 
   Copyright (c) 2006 - 2021, Intel Corporation. All rights reserved.<BR>
   Portions copyright (c) 2008 - 2009, Apple Inc. All rights reserved.<BR>
